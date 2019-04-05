@@ -8,4 +8,3 @@ version: 2
 # Build documentation with MkDocs
 mkdocs:
   configuration: readthedocs/mkdocs.yml
-  fail_on_warning: true
