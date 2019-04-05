@@ -7,4 +7,4 @@ version: 2
 
 # Build documentation with MkDocs
 mkdocs:
-  configuration: ../readthedocs/mkdocs.yml
+  configuration: readthedocs/mkdocs.yml
