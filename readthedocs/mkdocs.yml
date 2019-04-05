@@ -1,7 +1,0 @@
-site_name: Openstack Alpine Linux Image
-repo_url: https://github.com/jupytercloud-project/openstack-alpine-image
-docs_dir: readthedocs
-nav:
-- Home: docs/home.md
-theme:
-    name: readthedocs
