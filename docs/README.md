@@ -10,6 +10,9 @@ $ brew install qemu
 ```
 
 ## Packer
+- https://www.packer.io/
+
+### Installation
 ```bash
 $ brew install packer
 ```
