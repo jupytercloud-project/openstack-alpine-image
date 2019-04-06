@@ -24,12 +24,16 @@ $ pip2 install python-openstackclient
 ## Built Image
 ### Parted
 
-### GPT
+### Partition table
+#### GPT
 
-### GRUB
+### Logical Volume Manager
 
-### LVM
+### File System
+#### XFS
 
-### XFS
+### Boot Loader
+#### GRUB
 
-### cloud-init
+### Cloud Instance Customization
+#### cloud-init
