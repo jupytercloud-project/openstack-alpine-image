@@ -1,5 +1,7 @@
 theme: jekyll-theme-minimal
-title: Deploying JupyterHub in the Cloud
+title: Deploying
+       JupyterHub
+       in the Cloud
 description: Openstack Alpine Linux Image
 logo: jupytercloud1.png
 show_downloads: false
