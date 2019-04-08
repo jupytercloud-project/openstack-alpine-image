@@ -37,3 +37,7 @@ $ pip2 install python-openstackclient
 
 ### Cloud Instance Customization
 #### cloud-init
+- [Cloud Init](https://cloudinit.readthedocs.io/en/latest/)
+- [Link-local Address](https://en.wikipedia.org/wiki/Link-local_address)
+- [Dynamic Configuration of IPv4 Link-Local Addresses](https://tools.ietf.org/html/rfc3927)
+- [Openstack Metadata Service](https://docs.openstack.org/nova/latest/user/metadata-service.html)
