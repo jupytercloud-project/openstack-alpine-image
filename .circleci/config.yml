@@ -15,28 +15,28 @@ jobs:
       GHR: github.com/tcnksm/ghr
       DKR: https://github.com/jupytercloud-project/build-container/releases/download/0.0.1/jupytercloud-project_build-container_latest.dkr
     steps:
-      - checkout
-      - run:
-        name: "Define environment variables"
-        command: |
-          echo 'export RELEASE_VERSION=0.0.1' >> ${BASH_ENV}
-      - run:
-        name: "Fetching build container image"
-        command: |
-          curl --location ${DKR} | docker load
-     - run:
-        name: "Running build container"
-        command: |
-          docker-compose up
-      - run:
-        name: "Publishing release on GitHub"
-        command: |
-          go get ${GHR} && \
-          VERSION=${RELEASE_VERSION} \
-          ghr -t ${GITHUB_TOKEN} \
-              -u ${CIRCLE_PROJECT_USERNAME} \
-              -r ${CIRCLE_PROJECT_REPONAME} \
-              -c ${CIRCLE_SHA1} \
-              -delete \
-              ${RELEASE_VERSION} \
-              ${ARTIFACT_DIR}/
+    - checkout
+    - run:
+      name: "Define environment variables"
+      command: |
+        echo 'export RELEASE_VERSION=0.0.1' >> ${BASH_ENV}
+    - run:
+      name: "Fetching build container image"
+      command: |
+        curl --location ${DKR} | docker load
+   - run:
+      name: "Running build container"
+      command: |
+        docker-compose up
+    - run:
+      name: "Publishing release on GitHub"
+      command: |
+        go get ${GHR} && \
+        VERSION=${RELEASE_VERSION} \
+        ghr -t ${GITHUB_TOKEN} \
+            -u ${CIRCLE_PROJECT_USERNAME} \
+            -r ${CIRCLE_PROJECT_REPONAME} \
+            -c ${CIRCLE_SHA1} \
+            -delete \
+            ${RELEASE_VERSION} \
+            ${ARTIFACT_DIR}/
