@@ -17,19 +17,19 @@ jobs:
     steps:
     - checkout
     - run:
-        name: "Define environment variables"
+        name: 'Define environment variables'
         command: |
           echo 'export RELEASE_VERSION=0.0.1' >> ${BASH_ENV}
     - run:
-        name: "Fetching build container image"
+        name: 'Fetching build container image'
         command: |
           curl --location ${DKR} | docker load
    - run:
-        name: "Running build container"
+        name: 'Running build container'
         command: |
           docker-compose up
     - run:
-        name: "Publishing release on GitHub"
+        name: 'Publishing release on GitHub'
         command: |
           go get ${GHR} && \
           VERSION=${RELEASE_VERSION} \
