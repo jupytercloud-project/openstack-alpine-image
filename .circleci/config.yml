@@ -24,7 +24,7 @@ jobs:
         name: 'Fetching build container image'
         command: |
           curl --location ${DKR} | docker load
-   - run:
+    - run:
         name: 'Running build container'
         command: |
           docker-compose up
