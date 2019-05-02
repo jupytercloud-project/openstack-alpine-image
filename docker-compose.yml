@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  
+  build_container:
+    container_name: build_container
+    image: jupytercloud-project/build-container:latest
+    ports:
+    - "127.0.0.1:6000-6020:6000-6020"
+    volumes:
+    - .:/src
+    - ./packer_cache:/packer_cache
+    - ./qemu-registry:/qemu-registry
+    command: /bin/bash /src/tools/hashicorp/packer/images/openstack-alpine-image/build.bash
