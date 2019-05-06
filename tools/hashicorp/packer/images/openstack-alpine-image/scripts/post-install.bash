@@ -97,9 +97,9 @@ function install_cloud_init_lite {
 }
 
 function main {
-  install_fuse
-  install_docker
-  install_consul
+#  install_fuse
+#  install_docker
+#  install_consul
   install_motd
   install_udhcpc
   install_yq
