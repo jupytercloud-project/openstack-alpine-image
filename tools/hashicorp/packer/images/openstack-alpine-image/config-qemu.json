@@ -5,7 +5,8 @@
     "tmp_size": "256M",
     "disk_size": "300",
     "__disk_format": "either qcow2 or raw. qcow2 compaction failed on APFS and since Openstack convert QCOW2 to RAW, make it RAW",
-    "disk_format": "raw"
+    "disk_format": "raw",
+    "boot_wait": "90s"
   },
   "builders": [
     {
@@ -19,7 +20,8 @@
         [ "-chardev", "socket,id=monitor,path=run/monitor.sock,server,nowait" ],
         [ "-monitor", "chardev:monitor" ],
         [ "-chardev", "socket,id=serial0,path=run/console.sock,server,nowait" ],
-        [ "-serial", "chardev:serial0" ]
+        [ "-serial", "chardev:serial0" ],
+        [ "-writeconfig", "{{ user `project_directory` }}/run/vm.cfg" ]
       ],
 
       "vm_name": "{{user `image_name_base`}}-{{user `alpine_version`}}.{{user `disk_format`}}",
@@ -28,7 +30,9 @@
       "iso_url": "{{user `source_image`}}",
       "disk_image": true,
 
+      "vnc_bind_address": "0.0.0.0",
       "vnc_port_min": "6000",
+      "vnc_port_max": "6020",
 
       "disk_size": "{{user `disk_size`}}",
       "format": "{{user `disk_format`}}",
