@@ -1,5 +1,8 @@
 #!/bin/bash
 
+
+set -x
+
 qemu_output='output-qemu'
 qemu_registry='qemu-registry/'
 packer_project="$(dirname ${BASH_SOURCE})"
@@ -33,7 +36,7 @@ function ::AlpineRelease::Metadata.fetch() {
 #    | jq --from-file ${packer_project}/release.jq \
 #          --arg mirror ${alpine_mirror} \
 #  > ${packer_project}/run/release.json
-  echo '{ "source_image": "./qemu-registry/qemu-image-alpine-3.9.3.raw" }' > ${packer_project}/run/release.json
+  echo "{ \"source_image\": \"${qemu-registry}${source_image_name}\" }" > ${packer_project}/run/release.json
 }
 function ::Packer.build() {
   #PACKER_LOG_PATH=${packer_log_path} \
