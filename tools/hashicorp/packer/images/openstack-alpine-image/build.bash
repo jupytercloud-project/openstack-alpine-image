@@ -5,14 +5,17 @@ qemu_registry='qemu-registry/'
 packer_project="$(dirname ${BASH_SOURCE})"
 image_name_base="$(basename ${packer_project})"
 alpine_version='3.9.3'
-#alpine_mirror='http://dl-cdn.alpinelinux.org'
-#latest_releases='latest-releases.yaml'
-#alpine_releases="${alpine_mirror}/alpine/latest-stable/releases/x86_64/${latest_releases}"
+source_image_release="${0.0.1}"
+source_image_name="qemu-alpine-image-${alpine_version}.raw"
+source_image_url="https://github.com/jupytercloud-project/qemu-alpine-image/releases/download/${source_image_release}/${source_image_name}"
 
 function ::Build.prepare() {
   rm -Rf "${qemu_output}"
   mkdir -p "${packer_project}/run"
   mkdir -p "${qemu_registry}"
+  curl --location \
+       --output "${qemu_registry}/${}" \
+       ${source_image}
 }
 
 function ::Facts.fetch() { 
