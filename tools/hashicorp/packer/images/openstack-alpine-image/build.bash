@@ -36,7 +36,7 @@ function ::AlpineRelease::Metadata.fetch() {
 #    | jq --from-file ${packer_project}/release.jq \
 #          --arg mirror ${alpine_mirror} \
 #  > ${packer_project}/run/release.json
-  echo "{ \"source_image\": \"${qemu-registry}${source_image_name}\" }" > ${packer_project}/run/release.json
+  echo "{ \"source_image\": \"${qemu_registry}${source_image_name}\" }" > ${packer_project}/run/release.json
 }
 function ::Packer.build() {
   #PACKER_LOG_PATH=${packer_log_path} \
