@@ -45,7 +45,7 @@ function ::Packer.build() {
     -var-file ${packer_project}/run/facts.json \
     -var-file ${packer_project}/run/release.json \
     ${packer_project}/config-qemu.json \
-  && mv ${output_qemu}/${image_name_base}-${alpine_version}.raw ${qemu_registry}
+  && mv ${qemu_output}/${image_name_base}-${alpine_version}.raw ${qemu_registry}
 }
 function ::Main () {
   ::Build.prepare
