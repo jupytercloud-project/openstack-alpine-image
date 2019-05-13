@@ -27,19 +27,19 @@ start() {
   #
   #
   #
- # set -ux
+  set -ux
  # einfo 'Growing slash if needed'
   
   #
   # fix the partition table if needed
   # cf https://helpmanual.io/help/sgdisk/
-  sgdisk --move-second-header ${disk}  > /dev/null 2>&1
-  partprobe ${disk} > /dev/null 2>&1
-  parted ${disk} resizepart ${partition_number} 100% > /dev/null 2>&1
+  sgdisk --move-second-header ${disk}  #> /dev/null 2>&1
+  partprobe ${disk} #> /dev/null 2>&1
+  parted ${disk} resizepart ${partition_number} 100% #> /dev/null 2>&1
   #
   # resize the Physical Volume
   #
-  pvresize ${disk}${partition_number} > /dev/null 2>&1
+  pvresize ${disk}${partition_number} #> /dev/null 2>&1
   #
   # resize the Logical Volume
   #
@@ -49,7 +49,7 @@ start() {
   #
   # resize the File System
   #
-  xfs_growfs / > /dev/null 2>&1
+  xfs_growfs / #> /dev/null 2>&1
   
   df --output=source,size,used,avail,pcent,target \
      --human-readable /dev/mapper/alpine-slash
