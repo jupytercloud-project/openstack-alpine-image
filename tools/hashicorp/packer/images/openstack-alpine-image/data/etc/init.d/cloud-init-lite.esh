@@ -1,1 +1,131 @@
 
+#!/sbin/openrc-run
+
+description='Cloud Init lite'
+command='/usr/bin/cloud-init-lite'
+
+depend() {
+  need   net
+  before sshd
+}
+
+start() {
+  ebegin "Starting ${RC_SVCNAME}"
+  local disk='/dev/vda'
+  local partition_number=2
+  local metadata_service='http://openstack-metadata-service.link-local/openstack/latest'
+  #
+  #
+  #
+
+#  printf "Contacting Openstack Metadata Service\n"
+#  wget "${metadata_service}/meta_data.json" \
+#    -O "/tmp/cloud_init_meta_data/json" \
+#    -T 2
+#  wget "${metadata_service}/user_data" \
+#    -O "/tmp/cloud_init_user_data.txt" \
+#    -T 2
+  #
+  #
+  #
+ # set -ux
+ # einfo 'Growing slash if needed'
+  
+  #
+  # fix the partition table if needed
+  # cf https://helpmanual.io/help/sgdisk/
+  sgdisk --move-second-header ${disk}  > /dev/null 2>&1
+  partprobe ${disk} > /dev/null 2>&1
+  parted ${disk} resizepart ${partition_number} 100% > /dev/null 2>&1
+  #
+  # resize the Physical Volume
+  #
+  pvresize ${disk}${partition_number} > /dev/null 2>&1
+  #
+  # resize the Logical Volume
+  #
+  lvextend --extents +100%FREE \
+            --quiet /dev/mapper/alpine-slash \
+            > /dev/null 2>&1 
+  #
+  # resize the File System
+  #
+  xfs_growfs / > /dev/null 2>&1
+  
+  df --output=source,size,used,avail,pcent,target \
+     --human-readable /dev/mapper/alpine-slash
+  
+
+
+  if [ -f "/root/cloud-init-lite.done" ]; then
+    printf '%s\n' 'Already configured'
+  else
+
+    #
+    # 
+    #
+    CDROM_VOLUME_ID=$(blkid /dev/cdrom | sed -n --regexp-extended 's/.*LABEL="([^"]*)".*/\1/p')
+    CLOUD_DRIVE_VOLUME_ID='config-2'
+
+    if [ "X${CDROM_VOLUME_ID}" == "X${CLOUD_DRIVE_VOLUME_ID}" ]; then
+      mount /media/cdrom
+      cloud_drive_ssh_public_keys_install
+      cloud_drive_user_data
+      #sleep 20
+    fi
+    touch "/root/cloud-init-lite.done"
+  fi
+  ip a
+  netstat -rn
+  #eend 0
+}
+
+#stop() {
+  #eend 0
+#}
+#
+#
+#
+cloud_drive_ssh_public_keys_data() {
+  local meta_data_file="${1}"
+  cat "${meta_data_file}" | jq --compact-output --raw-output .keys[].data
+}
+
+#
+#
+#
+cloud_drive_ssh_public_keys_install() {
+  local meta_data_file='/media/cdrom/openstack/latest/meta_data.json'
+  local ssh_dir='/home/alpine/.ssh'
+  #
+  # install ssh keys
+  #
+  if [ -f "${meta_data_file}" ]; then
+    mkdir -p "${ssh_dir}"
+    for cloud_drive_ssh_public_key_data in "$( cloud_drive_ssh_public_keys_data "${meta_data_file}" )"; do
+      printf '%s\n' "${cloud_drive_ssh_public_key_data}" >> "${ssh_dir}/authorized_keys"
+    done
+    chown -R alpine:wheel "${ssh_dir}"
+    chmod -R go-rwx "${ssh_dir}" 
+  fi
+}
+#
+#
+#
+cloud_drive_user_data() {
+  local user_data_file='/media/cdrom/openstack/latest/user_data'
+  local shebang=''
+  local shebang_shell=''
+  if [ -f "${user_data_file}" ]; then
+    #
+    # read the first file line
+    #
+    read -r shebang < "${user_data_file}"
+    shebang_shell=$(echo "${shebang}" | sed --silent --regexp-extended 's/^\#\!(\/bin\/sh).*/\1/p')
+    if [ "X${shebang_shell}" != "X"  ]; then
+      ${shebang_shell} ${user_data_file}
+    else
+      echo 'ONLY SHELL SCRIPT ALLOWED'
+    fi
+  fi
+}
