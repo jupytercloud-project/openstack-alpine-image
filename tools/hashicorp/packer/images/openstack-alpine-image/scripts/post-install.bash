@@ -87,7 +87,7 @@ function install_cloud_init_lite {
   #
   #
   #
-  printf "169.254.169.254 openstack-metadata-service.link-local\n" >> /etc/hosts
+  printf "%s\n" "169.254.169.254 openstack-metadata-service.link-local" >> /etc/hosts
 
   esh -o /etc/init.d/cloud-init-lite \
       /tmp/data/etc/init.d/cloud-init-lite.esh
@@ -102,7 +102,7 @@ function main {
 #  install_consul
   install_motd
   install_udhcpc
-  install_yq
+#  install_yq
   install_cloud_init_lite
 }
 
