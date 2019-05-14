@@ -12,3 +12,24 @@ services:
     - ./packer_cache:/packer_cache
     - ./qemu-registry:/qemu-registry
     command: /bin/bash /src/tools/hashicorp/packer/images/openstack-alpine-image/build.bash
+
+  publish_container:
+    container_name: publish_container
+    image: jupytercloud-project/build-container:latest
+    volumes:
+    - ./qemu-registry:/qemu-registry
+    environment:
+    - GITHUB_TOKEN=${GITHUB_TOKEN}
+    - CIRCLE_PROJECT_USERNAME=${CIRCLE_PROJECT_USERNAME}
+    - CIRCLE_PROJECT_REPONAME=${CIRCLE_PROJECT_REPONAME}
+    - CIRCLE_SHA1=${CIRCLE_SHA1}
+    - RELEASE_VERSION=${RELEASE_VERSION}
+    - ARTIFACT_DIR='/qemu-registry'
+    command: |
+      ghr -t ${GITHUB_TOKEN} \
+          -u ${CIRCLE_PROJECT_USERNAME} \
+          -r ${CIRCLE_PROJECT_REPONAME} \
+          -c ${CIRCLE_SHA1} \
+          -delete \
+          ${RELEASE_VERSION} \
+          ${ARTIFACT_DIR}/
