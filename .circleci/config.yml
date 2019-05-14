@@ -27,7 +27,7 @@ jobs:
     - run:
         name: 'Running build container'
         command: |
-          docker-compose up
+          docker-compose up build_container
     - run:
         name: 'Publishing release on GitHub'
         command: |
